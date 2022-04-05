@@ -81,6 +81,7 @@ public class InteractableObject : MonoBehaviour
 
     public void SetFocus(bool focus)
     {
+        Debug.Log("Setting focus on " + gameObject.name + ": " + focus);
         isFocused = focus;
     }
 

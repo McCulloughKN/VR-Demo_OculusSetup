@@ -27,27 +27,27 @@ public class ControllerHandler : MonoBehaviour
 
        triggerIsPressed = triggerInput > pressThreshold ? true : false;
 
-        if (triggerIsPressed)
-        {
-            if(curInteractable != null && canInteract)
-            {
-                if (curInteractable.IsGrabbable())
-                {
-                    canInteract = false;
-                    GrabObject(curInteractable);
-                }
-            }
-        }
-        else
-        {
-            if(curInteractable != null)
-            {
-                ReleaseObject(curInteractable);
-                curInteractable = null;
-            }
+        //if (triggerIsPressed)
+        //{
+        //    if(curInteractable != null && canInteract)
+        //    {
+        //        if (curInteractable.IsGrabbable())
+        //        {
+        //            canInteract = false;
+        //            GrabObject(curInteractable);
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    if(curInteractable != null)
+        //    {
+        //        ReleaseObject(curInteractable);
+        //        curInteractable = null;
+        //    }
 
-            canInteract = true;
-        }
+        //    canInteract = true;
+        //}
 
         if (OVRInput.GetDown(OVRInput.Button.One, controller))
         {
@@ -85,17 +85,26 @@ public class ControllerHandler : MonoBehaviour
 
     private void SetFocusObject(InteractableObject interactObj)
     {
-        if(curInteractable != null) curInteractable.SetFocus(false);
+        if (interactObj == null)
+        {
+            if (curInteractable != null)
+            {
+                Debug.Log("No ray hit, clearing interactable");
+                curInteractable.SetFocus(false);
+                curInteractable = interactObj;
+            }
+            return;
+        }
 
         curInteractable = interactObj;
-        if(interactObj != null) curInteractable.SetFocus(true);
+        curInteractable.SetFocus(true);
     }
 
     private void OnDrawGizmos()
     {
         if (debug)
         {
-            Gizmos.DrawWireSphere(grabTransform.position, interactDistance);
+            Gizmos.DrawLine(grabTransform.position, (grabTransform.forward * interactDistance) + grabTransform.position);
         }
     }
 
